@@ -20,15 +20,23 @@ public class Todo {
     private String content;
 
     @Column(name = "todo_is_check", columnDefinition = "tinyint(1)")
-    private boolean inchecked;
+    private boolean isChecked;
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    public Todo(String content, boolean inchecked, Member member) {
+    public Todo(String content, boolean isChecked, Member member) {
         this.content = content;
-        this.inchecked = inchecked;
+        this.isChecked = isChecked;
         this.member = member;
+    }
+
+    public void updateContent(String newContent){
+        this.content = newContent;
+    }
+
+    public void updateIsChecked(boolean newIsChecked){
+        this.isChecked = newIsChecked;
     }
 }

@@ -16,11 +16,16 @@ public class Friends {
     @Column(name = "friend_id")
     private Long id;
 
-    @JoinColumn(name = "memeber_id")
+    @JoinColumn(name = "from_member_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Member fromMember;
 
-    public Friends(Member member) {
-        this.member = member;
+    @JoinColumn(name = "to_member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member toMember;
+
+    public Friends(Member fromMember, Member toMember) {
+        this.fromMember = fromMember;
+        this.toMember = toMember;
     }
 }
