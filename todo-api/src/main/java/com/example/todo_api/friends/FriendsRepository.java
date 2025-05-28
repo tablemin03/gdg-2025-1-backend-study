@@ -1,11 +1,12 @@
 package com.example.todo_api.friends;
 
-import com.example.todo_api.todo.Todo;
+import com.example.todo_api.member.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class FriendsRepository {
@@ -18,13 +19,18 @@ public class FriendsRepository {
         em.persist(friends);
     }
 
-    // 조회
-    public Friends findById(Long id){
-        return em.find(Friends.class, id);
+    public Optional<Friends> findByFromAndTo(Long fromId, Long toId) {
+        return em.createQuery("SELECT f FROM Friends f WHERE f.fromMember.id = :from AND f.toMember.id = :to", Friends.class)
+                .setParameter("from", fromId)
+                .setParameter("to", toId)
+                .getResultStream()
+                .findFirst();
     }
 
-    public List<Friends> findAll(){
-        return em.createQuery("select t from Friends as t", Friends.class).getResultList();
+    public List<Member> findAll(Long fromId){
+        return em.createQuery("SELECT f.toMember FROM Friends f WHERE f.fromMember.id = :fromId", Member.class)
+                .setParameter("fromId", fromId)
+                .getResultList();
     }
 
     // 삭제

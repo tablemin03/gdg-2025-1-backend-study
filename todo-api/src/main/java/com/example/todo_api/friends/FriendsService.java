@@ -15,26 +15,25 @@ public class FriendsService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void follow(Long friendId){
-        Friends friend = friendsRepository.findById(friendId);
+    public void follow(Long fromId, Long toId) {
+        Member fromMem = memberRepository.findById(fromId);
+        Member toMem = memberRepository.findById(toId);
+        Friends friend = new Friends(fromMem, toMem);
         friendsRepository.save(friend);
     }
 
     @Transactional(readOnly = true)
-    public List<Friends> readFriends(Long friendId){
-        Friends friend = friendsRepository.findById(friendId);
-        if(friend == null){
-            throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
-        }
-        return friendsRepository.findAll();
+    public List<Member> readFriends(Long fromId){
+        return friendsRepository.findAll(fromId);
     }
 
     @Transactional
-    public void unFollow(Long followId){
-        Friends friend = friendsRepository.findById(followId);
+    public void unFollow(Long from, Long to) {
+        Friends friend = friendsRepository.findByFromAndTo(from, to)
+                .orElseThrow(() -> new RuntimeException("팔로우 관계를 찾을 수 없습니다."));
         if(friend == null){
             throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
         }
-        friendsRepository.deleteById(followId);
+        friendsRepository.deleteById(friend.getId());
     }
 }

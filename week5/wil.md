@@ -48,3 +48,11 @@ PathParameter이었나 그건 사용하면 편하겠지만 아직까지는 굳�
 ## todo 수정
 ![alt text](image-10.png)
 ![alt text](image-11.png)
+## follow
+![alt text](image-12.png)
+![alt text](image-13.png)
+## unfollow
+![alt text](image-14.png)
+![alt text](image-15.png)
+## 친구 조회
+![alt text](image-16.png)
