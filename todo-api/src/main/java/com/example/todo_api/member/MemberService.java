@@ -1,9 +1,10 @@
 package com.example.todo_api.member;
 
-import com.example.todo_api.todo.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.todo_api.common.ErrorMessage.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class MemberService {
     public void deleteMember(Long memberId){
         Member member = memberRepository.findById(memberId);
         if(member == null){
-            throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
         memberRepository.deleteById(memberId);
     }
@@ -30,11 +31,11 @@ public class MemberService {
     public void updatePassword(Long memberId, String password, String newPassword){
         Member member = memberRepository.findById(memberId);
         if(member == null){
-            throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
         boolean result = member.getPassword().equals(password);
         if(!result){
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new RuntimeException(NOT_YOUR_PASSWORD);
         }
         else {member.updatePassword(newPassword);}
     }
@@ -43,10 +44,10 @@ public class MemberService {
     public void login(String email, String password){
         Member member = memberRepository.findByEmail(email);
         if(member == null){
-            throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
         if(!member.getPassword().equals(password)) {
-            throw new RuntimeException("이메일이나 비밀번호가 일치하지 않습니다.");
+            throw new RuntimeException(NOT_YOUR_EMAIL);
         }
     }
 }

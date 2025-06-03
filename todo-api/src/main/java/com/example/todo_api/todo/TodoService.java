@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.todo_api.common.ErrorMessage.*;
+
 @Service
 @RequiredArgsConstructor
 public class TodoService {
@@ -21,7 +23,7 @@ public class TodoService {
         Member member = memberRepository.findById(memberId);
 
         if(member == null){
-            throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
 
         Todo todo = new Todo(content, member);
@@ -35,7 +37,7 @@ public class TodoService {
         Member member = memberRepository.findById(memeberId);
 
         if(member == null){
-            throw new RuntimeException("존재하지 않는 유저 ID 입니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
 
         return todoRepository.findAllByMember(member);
@@ -47,13 +49,13 @@ public class TodoService {
         Member member = memberRepository.findById(memberId);
 
         if(member == null) {
-            throw new RuntimeException("멤버가 존재하지 않습니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
         if(todo == null){
-            throw new RuntimeException("할 일이 존재하지 않습니다.");
+            throw new RuntimeException(TODO_NOT_EXIST);
         }
         if(todo.getMember() != member){
-            throw new RuntimeException("자신의 할 일만 수정할 수 있습니다.");
+            throw new RuntimeException(NOT_YOUR_TODO);
         }
 
         todo.updateContent(newContent);
@@ -64,13 +66,13 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId);
         Member member = memberRepository.findById(memberId);
         if(member == null) {
-            throw new RuntimeException("멤버가 존재하지 않습니다.");
+            throw new RuntimeException(MEMBER_NOT_EXIST);
         }
         if(todo == null){
-            throw new RuntimeException("할 일이 존재하지 않습니다.");
+            throw new RuntimeException(TODO_NOT_EXIST);
         }
         if(todo.getMember() != member){
-            throw new RuntimeException("자신의 할 일만 삭제할 수 있습니다.");
+            throw new RuntimeException(NOT_YOUR_TODO);
         }
 
         todoRepository.deleteById(todoId);
